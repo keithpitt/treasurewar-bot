@@ -39,6 +39,11 @@ class Map
     @tiles[point.x] ||= []
     existing = @tiles[point.x][point.y]
 
+    if point.type == 'you'
+      point = point.dup
+      point.type = 'floor'
+    end
+
     unless existing
       existing = @tiles[point.x][point.y] = point
       expand point

@@ -31,8 +31,6 @@ class Renderer
                    type = tile.type
                    if type == 'floor'
                      "."
-                   elsif type == 'you'
-                     "@"
                    elsif type == 'stash'
                      "$"
                    elsif type == 'item'
@@ -42,8 +40,12 @@ class Renderer
                    end
                  end
 
+          # Is it a flag?
           flag = (flags[x] || [])[y]
           char = flag.char if flag
+
+          # Is it the player
+          char = '@' if tile == @brain.player.position
 
           buffer << (char || "").ljust(3)
         end

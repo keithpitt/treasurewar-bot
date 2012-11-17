@@ -6,10 +6,11 @@ require_relative './path_finder'
 class Brain
   MAX_VIEW_DISTANCE = 3
 
-  attr_reader :map
+  attr_reader :map, :player
 
   def initialize
     @map = Map.new
+    @player = nil
     @priority = []
 
     new_priority Explorer
@@ -21,6 +22,8 @@ class Brain
     world.tiles.each do |point|
       map.explore point, world
     end
+
+    @player = world.you
   end
 
   def new_priority(klass, options = {})
