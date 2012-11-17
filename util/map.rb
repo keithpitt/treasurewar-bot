@@ -2,11 +2,12 @@ require_relative './square'
 require_relative './flag'
 
 class Map
-  attr_reader :tiles, :size, :flags
+  attr_reader :tiles, :size, :flags, :points
 
   def initialize
     @tiles = []
     @flags = []
+    @points = []
     @size = 0
 
     @lowest_point = nil
@@ -36,10 +37,15 @@ class Map
 
   def store(point)
     @tiles[point.x] ||= []
-    @tiles[point.x][point.y] = point
-    expand point
+    existing = @tiles[point.x][point.y]
 
-    point
+    unless existing
+      existing = @tiles[point.x][point.y] = point
+      expand point
+      @points << point
+    end
+
+    existing
   end
 
   def clear_flags

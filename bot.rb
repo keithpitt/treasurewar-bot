@@ -30,14 +30,17 @@ ui.start do
         # Start remembering stuffs
         brain.tick world
 
-        # Manual move
-        directions = { UI::KEY_UP => "n" , UI::KEY_DOWN => "s",
-                       UI::KEY_LEFT => "w", UI::KEY_RIGHT => "e" }
+        # Show UI
+        ui.puts Renderer.new(brain).world
 
-        if perform_key && d = directions[perform_key]
-          emit "move", :dir => d
-          perform_key = nil
-        end
+        # Manual move
+        #directions = { UI::KEY_UP => "n" , UI::KEY_DOWN => "s",
+                       #UI::KEY_LEFT => "w", UI::KEY_RIGHT => "e" }
+
+        #if perform_key && d = directions[perform_key]
+          #emit "move", :dir => d
+          #perform_key = nil
+        #end
 
         # Valid commands:
         # emit("move", {dir: "n"})
@@ -45,10 +48,8 @@ ui.start do
         # emit("pick up", {dir: "ne"})
         # emit("throw", {dir: "ne"})
         action, options = brain.decide_action(world)
-        emit action, options
+        emit action, options if action
 
-        # Show UI
-        ui.puts Renderer.new(brain).world
         ui.draw
       }
     end

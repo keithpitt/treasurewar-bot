@@ -91,7 +91,7 @@ class PathFinder
       # On the other hand, if the G cost of the new path is lower, change the parent of the adjacent square to the selected square
       # (in the diagram above, change the direction of the pointer to point at the selected square). Finally, recalculate both the F and G
       # scores of that square. If this seems confusing, you will see it illustrated below.
-      walkable_points_from(current_point).each do |point|
+      kind_of_walkable_points_from(current_point).each do |point|
         # Do nothing if already on the closed list
         unless closed_list.include?(point)
           adjacent_g_cost = calculate_g_cost parent_point || current_point, point
@@ -115,6 +115,14 @@ class PathFinder
       break if found_destination
 
       parent_point = current_point
+    end
+
+    unless found_destination
+      p open_list
+      p closed_list
+      p starting_point
+      p @destination
+      raise 'cant find it'
     end
 
     path = []
@@ -165,11 +173,11 @@ class PathFinder
     optimized_path
   end
 
-  def walkable_points_from(point)
+  def kind_of_walkable_points_from(point)
     scope = Square.new(point.x, point.y, point.x, point.y)
     scope.pad(1)
 
-    Area.new(@brain.map, scope).walkable_points
+    Area.new(@brain.map, scope).kind_of_walkable_points
   end
 
   def calculate_g_cost(starting_point, current_point)

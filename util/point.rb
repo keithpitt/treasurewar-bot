@@ -69,6 +69,10 @@ class Point
     @type == 'floor'
   end
 
+  def floor?
+    @type == 'floor'
+  end
+
   def unknown?
     @type == 'unknown'
   end
