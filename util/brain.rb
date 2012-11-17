@@ -1,43 +1,19 @@
 require_relative './square'
+require_relative './map'
 
 class Brain
-  VIEW_DISTANCE = 3
+  MAX_VIEW_DISTANCE = 3
 
-  attr_reader :map, :size
+  attr_reader :map
 
   def initialize
-    @map = []
-    @scope = nil
-    @size = 0
+    @map = Map.new
   end
 
   def tick(world)
     world.tiles.each do |point|
-      explore point, world
+      map.explore point, world
     end
-  end
-
-  def explore(point, world)
-    # Is it something the world knows about? Or is it the player?
-    point_type = if point.type == 'player' || point == world.you.position
-                   point = world.you.position
-                   'player'
-                 else
-                   point.type
-                 end
-
-    @map[point.x] ||= []
-    @map[point.x][point.y] = point_type || 'space'
-
-    # Expand the world
-    @size = point.x if point.x > @size
-    @size = point.y if point.y > @size
-
-    @map[point.x][point.y]
-  end
-
-  def find(point)
-    (@map[point.x] || [])[point.y]
   end
 
   def random_direction(world)
@@ -47,7 +23,7 @@ class Brain
 
     # Find all the floor tiles
     points = scope.area.find_all do |coord|
-      find(coord) == 'floor'
+      map.find(coord) == 'floor'
     end
 
     # Choose somewhere to go

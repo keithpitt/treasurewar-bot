@@ -4,11 +4,11 @@ class Renderer
   end
 
   def world
-    map = @brain.map
-    size = @brain.size
+    tiles = @brain.map.tiles
+    size = @brain.map.size
     buffer = ""
 
-    if map
+    if tiles
       # Header
       buffer << "".ljust(3)
       size.times do |x|
@@ -24,7 +24,7 @@ class Renderer
 
         size.times do |x|
           x = x + 1
-          tile = (map[x] || [])[y]
+          tile = (tiles[x] || [])[y]
           char = if tile == 'floor'
             "."
           elsif tile == 'player'
