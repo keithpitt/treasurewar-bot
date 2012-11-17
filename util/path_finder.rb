@@ -24,6 +24,10 @@ class PathFinder
   def decide_action(world)
     @chosen_path ||= find_path(world)
 
+    @current_path.each do |p|
+      @brain.map.color p, 'black'
+    end
+
     if @chosen_path.length == 0
       return 'priority', :class => Explorer
     else

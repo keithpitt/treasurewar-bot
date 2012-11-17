@@ -1,4 +1,6 @@
 class Renderer
+  require 'colorize'
+
   def initialize(brain)
     @brain = brain
   end
@@ -6,6 +8,7 @@ class Renderer
   def world
     tiles = @brain.map.tiles
     flags = @brain.map.flags
+    colors = @brain.map.colors
     size = @brain.map.size
     buffer = ""
 
@@ -47,7 +50,20 @@ class Renderer
           # Is it the player
           char = '@' if tile == @brain.player.position
 
-          buffer << (char || "").ljust(3)
+          # Pad it out
+          char = (char || "").ljust(3)
+
+          # Should I color the tile?
+          color = (colors[x] || [])[y]
+          if color
+            char = if color.to_sym == :black
+              char.colorize(:black).on_white
+            else
+              char.colorize(color.to_sym)
+            end
+          end
+
+          buffer << char
         end
 
         buffer << "\n"
