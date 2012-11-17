@@ -1,6 +1,6 @@
 require "ir_b"
 class Point
-  attr_accessor :x, :y
+  attr_accessor :x, :y, :type
 
   include Comparable
 
@@ -51,5 +51,9 @@ class Point
 
   def == (point)
     @x == point.x && @y == point.y
+  end
+
+  def inspect
+    "#{@x},#{@y}"
   end
 end
