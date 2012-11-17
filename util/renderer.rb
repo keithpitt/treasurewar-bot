@@ -1,26 +1,24 @@
 class Renderer
   def initialize(brain)
     @brain = brain
-    clear
   end
 
-  def render(&block)
-    clear
-    yield
-
+  def world
     map = @brain.map
     size = @brain.size
+    buffer = ""
+
     if map
       # Header
-      print "".ljust(3)
+      buffer << "".ljust(3)
       size.times do |x|
-        print x.to_s.ljust(3)
+        buffer << x.to_s.ljust(3)
       end
-      print "\n"
+      buffer << "\n"
 
       # Down
       size.times do |y|
-        print y.to_s.ljust(3)
+        buffer << y.to_s.ljust(3)
 
         size.times do |x|
           tile = (map[x] || [])[y]
@@ -34,17 +32,15 @@ class Renderer
             ""
           end
 
-          print char.ljust(3)
+          buffer << char.ljust(3)
         end
 
-        print "\n"
+        buffer << "\n"
       end
 
-      print "\n"
+      buffer << "\n"
     end
-  end
 
-  def clear
-    puts "\e[H\e[2J"
+    buffer
   end
 end

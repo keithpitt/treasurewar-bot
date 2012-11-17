@@ -4,8 +4,10 @@ require 'SocketIO'
 require_relative './util/world'
 require_relative './util/brain'
 require_relative './util/renderer'
+require_relative './util/ui'
 
 brain = Brain.new
+ui = UI.new
 
 client = SocketIO.connect("http://localhost:8000") do
   before_start do
@@ -13,12 +15,18 @@ client = SocketIO.connect("http://localhost:8000") do
 
     # You have about 1 second between each tick
     on_event('tick') { |game_state|
+      # Clear the screen
+      ui.clear
+
       world = World.new(game_state.first)
-      renderer = Renderer.new(brain)
 
-      renderer.render do
-        brain.tick world
+      # Start remembering stuffs
+      brain.tick world
 
+      # Show UI
+      ui.puts Renderer.new(brain).world
+
+      if true
         # Bot logic goes here...
         if world.nearby_players.any?
           # Random bot likes to fight!
