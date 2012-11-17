@@ -15,33 +15,41 @@ class Brain
     square = Square.new(start.x, start.y, start.x, start.y)
     square.pad(VIEW_DISTANCE)
 
+    scope = []
+
     square.area.each do |coord|
-      scan coord, world
+      scope[coord.x] ||=[]
+      scope[coord.x][coord.y] = scan coord, world
+
+      expand coord
     end
+
+    p scope
   end
 
   def scan(point, world)
-    point_type = 'space' # Assume the point is a floor
-
     # Is it something the world knows about? Or is it the player?
-    if point == world.you.position
-      point_type = 'player'
+    point_type = if point == world.you.position
+      'player'
     else
-      world.tiles.each do |tile|
-        if point == tile
-          point_type = tile.type
-        end
+      tile = world.tiles.find { |tile| tile == point }
+      if tile
+        tile.type
+      else
+        nil
       end
     end
 
     @map[point.x] ||= []
-    @map[point.x][point.y] = point_type
-
-    expand point
+    @map[point.x][point.y] = point_type || 'space'
   end
 
   def expand(point)
     @size = point.x if point.x > @size
     @size = point.y if point.y > @size
+  end
+
+  def valid_move_directions
+    []
   end
 end

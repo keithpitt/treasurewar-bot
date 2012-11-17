@@ -51,7 +51,7 @@ ui.start do
           else
             # Random bot moves randomly!
             emit("move", {
-              dir: world.valid_move_directions.sample
+              dir: brain.valid_move_directions.sample
             })
           end
         end

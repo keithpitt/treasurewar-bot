@@ -12,15 +12,18 @@ class Renderer
       # Header
       buffer << "".ljust(3)
       size.times do |x|
+        x = x + 1
         buffer << x.to_s.ljust(3)
       end
       buffer << "\n"
 
       # Down
       size.times do |y|
+        y = y + 1
         buffer << y.to_s.ljust(3)
 
         size.times do |x|
+          x = x + 1
           tile = (map[x] || [])[y]
           char = if tile == 'floor'
             ","
