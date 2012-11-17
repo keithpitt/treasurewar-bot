@@ -4,7 +4,7 @@ class Explorer
   end
 
   def decide_action(world)
-    return 'move', :dir => random_direction(world)
+    random_direction(world)
   end
 
   def random_direction(world)
@@ -16,21 +16,5 @@ class Explorer
     random_point = moveable_points.sample
 
     @brain.new_priority PathFinder, :point => random_point
-
-    if false
-      # Find all the floor tiles
-      points = scope.area.find_all do |coord|
-        @brain.map.find(coord) == 'floor'
-      end
-
-      outliers.each do |point|
-        @brain.map.flag point
-      end
-
-      # Choose somewhere to go
-      point = points.sample
-
-      start.direction_from(point)
-    end
   end
 end

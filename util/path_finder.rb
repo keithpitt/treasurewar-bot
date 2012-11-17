@@ -20,6 +20,16 @@ class PathFinder
   end
 
   def decide_action(world)
+    @chosen_path ||= find_path(world)
+
+    if @chosen_path.length == 0
+      @brain.finished_priority
+    else
+      return 'move', :dir => @chosen_path.shift
+    end
+  end
+
+  def find_path(world)
     starting_point = world.you.position
     closed_list = []
     open_list = [ PointMoved.new(starting_point, nil, nil) ]
@@ -93,7 +103,6 @@ class PathFinder
           end
 
           if point_with_parent == @destination
-            p 'found it!'
             found_destination = point_with_parent
             break
           end
@@ -123,8 +132,6 @@ class PathFinder
       end
     end
 
-    p directions
-
     # Try and cut corners
     optimized_path = []
 
@@ -145,9 +152,7 @@ class PathFinder
       end
     end
 
-    p optimized_path
-
-    @brain.map.flag @destination, '!'
+    optimized_path
   end
 
   def walkable_points_from(point)
