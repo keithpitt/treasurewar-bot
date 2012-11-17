@@ -8,6 +8,9 @@ class Map
     @tiles = []
     @flags = []
     @size = 0
+
+    @lowest_point = nil
+    @highest_point = nil
   end
 
   def explore(point, world)
@@ -15,6 +18,13 @@ class Map
     if point.type == 'player' || point == world.you.position
       point = world.you.position
     end
+
+    @lowest_point = Point.new(:x => point.x, :y => point.y) unless @lowest_point
+    @highest_point = Point.new(:x => point.x, :y => point.y) unless @highest_point
+    @lowest_point.x = point.x if point.x < @lowest_point.x
+    @lowest_point.y = point.y if point.y < @lowest_point.y
+    @highest_point.x = point.x if point.x > @highest_point.x
+    @highest_point.y = point.y if point.y > @highest_point.y
 
     # Or is there treasure?
     world.nearby_items.each do |item|
@@ -45,11 +55,21 @@ class Map
   end
 
   def find(point)
-    (@tiles[point.x] || [])[point.y]
+    found = (@tiles[point.x] || [])[point.y]
+
+    if found
+      found
+    else
+      Point.new(:x => point.x, :y => point.y, :type => 'unknown')
+    end
   end
 
   def expand(point)
     @size = point.x if point.x > @size
     @size = point.y if point.y > @size
+  end
+
+  def unknown_area
+    Square.new(@lowest_point.x, @lowest_point.y, @highest_point.x, @highest_point.y)
   end
 end

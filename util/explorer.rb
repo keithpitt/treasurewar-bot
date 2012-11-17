@@ -5,12 +5,13 @@ class Explorer
 
   def decide_action(world)
     start = world.you.position
-    scope = Square.new(start.x, start.y, start.x, start.y)
-    scope.pad(Brain::MAX_VIEW_DISTANCE)
+    unknown_points = @brain.map.unknown_area.pad(1).outer_points.map { |point| @brain.map.find(point) }
+    discoverable_points = unknown_points.find_all { |point| point.unknown? || point.walkable? }
 
-    moveable_points = scope.outer_points.find_all { |point| @brain.map.find(point).walkable? }
-    random_point = moveable_points.sample
-
-    return 'priority', :class => PathFinder, :point => random_point
+    if discoverable_points.any?
+      random_point = discoverable_points.sample
+      return 'priority', :class => PathFinder, :point => random_point
+    else
+    end
   end
 end

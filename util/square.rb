@@ -21,6 +21,7 @@ class Square < Struct.new(:x1, :y1, :x2, :y2)
     self.x2 = x2 + n
     self.y2 = y2 + n
     reset
+    self
   end
 
   def area

@@ -68,4 +68,8 @@ class Point
   def walkable?
     @type == 'floor'
   end
+
+  def unknown?
+    @type == 'unknown'
+  end
 end

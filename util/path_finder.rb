@@ -23,8 +23,6 @@ class PathFinder
 
   def decide_action(world)
     @chosen_path ||= find_path(world)
-    p @chosen_path
-    p @current_path
 
     if @chosen_path.length == 0
       return 'priority', :class => Explorer
@@ -129,7 +127,7 @@ class PathFinder
 
     @current_path = path
 
-    optimize_directions calculate_directions(path)
+    calculate_directions(path)
   end
 
   def calculate_directions(path)
