@@ -9,49 +9,67 @@ require_relative './util/ui'
 brain = Brain.new
 ui = UI.new
 
-client = SocketIO.connect("http://localhost:8000") do
-  before_start do
-    # on_message {|message| puts "incoming message: #{message}"}
+perform_key = nil
+ui.on_key do |key|
+  perform_key = key
+  ui.puts key
+end
 
-    # You have about 1 second between each tick
-    on_event('tick') { |game_state|
-      # Clear the screen
-      ui.clear
+ui.start do
+  client = SocketIO.connect("http://localhost:8000") do
+    before_start do
+      # on_message {|message| puts "incoming message: #{message}"}
 
-      world = World.new(game_state.first)
+      # You have about 1 second between each tick
+      on_event('tick') { |game_state|
+        ui.reset
 
-      # Start remembering stuffs
-      brain.tick world
+        world = World.new(game_state.first)
 
-      # Show UI
-      ui.puts Renderer.new(brain).world
+        # Start remembering stuffs
+        brain.tick world
 
-      if true
-        # Bot logic goes here...
-        if world.nearby_players.any?
-          # Random bot likes to fight!
-          emit("attack", {
-            dir: world.nearby_players.first.direction_from(
-              world.position
-            )
-          })
-        else
-          # Random bot moves randomly!
-          emit("move", {
-            dir: world.valid_move_directions.sample
-          })
+        # Manual move
+        directions = { UI::KEY_UP => "n" , UI::KEY_DOWN => "s",
+                       UI::KEY_LEFT => "w", UI::KEY_RIGHT => "e" }
+
+        if perform_key && d = directions[perform_key]
+          emit "move", :dir => d
+          perform_key = nil
         end
-      end
 
-      # Valid commands:
-      # emit("move", {dir: "n"})
-      # emit("attack", {dir: "ne"})
-      # emit("pick up", {dir: "ne"})
-      # emit("throw", {dir: "ne"})
-    }
-  end
+        if false
+          # Bot logic goes here...
+          if world.nearby_players.any?
+            # Random bot likes to fight!
+            emit("attack", {
+              dir: world.nearby_players.first.direction_from(
+                world.position
+              )
+            })
+          else
+            # Random bot moves randomly!
+            emit("move", {
+              dir: world.valid_move_directions.sample
+            })
+          end
+        end
 
-  after_start do
-    emit("set name", "sparrow")
+        # Show UI
+        ui.puts Renderer.new(brain).world
+
+        ui.draw
+
+        # Valid commands:
+        # emit("move", {dir: "n"})
+        # emit("attack", {dir: "ne"})
+        # emit("pick up", {dir: "ne"})
+        # emit("throw", {dir: "ne"})
+      }
+    end
+
+    after_start do
+      emit("set name", "sparrow")
+    end
   end
 end
