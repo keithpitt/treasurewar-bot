@@ -5,9 +5,10 @@ require_relative './util/world'
 require_relative './util/brain'
 require_relative './util/renderer'
 require_relative './util/ui'
+require_relative './util/ui_basic'
 
 brain = Brain.new
-ui = UI.new
+ui = UIBasic.new
 
 perform_key = nil
 ui.on_key do |key|
@@ -38,7 +39,7 @@ ui.start do
           perform_key = nil
         end
 
-        if false
+        if true
           # Bot logic goes here...
           if world.nearby_players.any?
             # Random bot likes to fight!
