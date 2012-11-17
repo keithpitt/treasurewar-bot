@@ -1,4 +1,6 @@
 require_relative './area'
+require_relative './point'
+require 'delegate'
 
 class PathFinder
   class PointMoved < SimpleDelegator
@@ -21,6 +23,8 @@ class PathFinder
 
   def decide_action(world)
     @chosen_path ||= find_path(world)
+    p @chosen_path
+    p @current_path
 
     if @chosen_path.length == 0
       return 'priority', :class => Explorer
@@ -96,11 +100,9 @@ class PathFinder
           point_with_parent = PointMoved.new(point, adjacent_g_cost, current_point)
 
           if open_list.include?(point)
-            if adjacent_g_cost < lowest_g_cost
-              point_with_parent.parent = point
-            end
-          else
-            point_with_parent.parent = current_point
+            #if adjacent_g_cost < lowest_g_cost
+              #point_with_parent.parent = point
+            #end
           end
 
           if point_with_parent == @destination
@@ -119,12 +121,18 @@ class PathFinder
 
     path = []
     parent = found_destination
-    while parent.parent != nil
+    while parent && parent.parent != nil
       path << parent
       parent = parent.parent
     end
     path << starting_point
 
+    @current_path = path
+
+    optimize_directions calculate_directions(path)
+  end
+
+  def calculate_directions(path)
     directions = []
     for i in 0..path.length
       point_after = path[i + 1]
@@ -133,7 +141,10 @@ class PathFinder
       end
     end
 
-    # Try and cut corners
+    directions.reverse
+  end
+
+  def optimize_directions(directions)
     optimized_path = []
 
     i = 0
