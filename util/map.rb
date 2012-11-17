@@ -1,10 +1,11 @@
 require_relative './square'
 
 class Map
-  attr_reader :tiles, :size
+  attr_reader :tiles, :size, :flags
 
   def initialize
     @tiles = []
+    @flags = []
     @size = 0
   end
 
@@ -17,12 +18,27 @@ class Map
                    point.type
                  end
 
+    store point, (point_type || 'space')
+  end
+
+  def store(point, type)
     @tiles[point.x] ||= []
-    @tiles[point.x][point.y] = point_type || 'space'
+    @tiles[point.x][point.y] = type
 
     # Expand the world
     @size = point.x if point.x > @size
     @size = point.y if point.y > @size
+
+    type
+  end
+
+  def clear_flags
+    @flags = []
+  end
+
+  def flag(point)
+    @flags[point.x] ||= []
+    @flags[point.x][point.y] = true
   end
 
   def find(point)

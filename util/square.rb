@@ -26,6 +26,18 @@ class Square < Struct.new(:x1, :y1, :x2, :y2)
     area
   end
 
+  def outer_points
+    points = []
+
+    area.each do |point|
+      if point.x == x1 || point.y == y1 || point.x == x2 || point.y == y2
+        points << point
+      end
+    end
+
+    points
+  end
+
   private
 
   def reset
