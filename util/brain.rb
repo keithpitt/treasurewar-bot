@@ -31,7 +31,7 @@ class Brain
     # Is the point a wall?
     world.walls.each do |wall|
       if point == wall
-        point_type == 'wall'
+        point_type = 'wall'
       end
     end
 

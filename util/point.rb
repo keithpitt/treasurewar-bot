@@ -54,6 +54,6 @@ class Point
   end
 
   def inspect
-    "#{@x},#{@y}"
+    "(#{@x},#{@y})"
   end
 end

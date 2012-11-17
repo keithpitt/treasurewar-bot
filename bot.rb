@@ -17,6 +17,8 @@ client = SocketIO.connect("http://localhost:8000") do
       renderer = Renderer.new(brain)
 
       renderer.render do
+        p game_state.first['nearby_treasure']
+
         brain.tick world
 
         # Bot logic goes here...
