@@ -1,0 +1,14 @@
+# Treasure Wars Example Bot
+
+See the rules of treasure wars [here](http://github.com/mtcmorris/treasurewar).
+
+## Developing
+
+Place your logic/code in the designated spot in `bot.rb`. Random bot is not very smart - perhaps you could make him `pick up` treasure if he sees it...
+
+Getting started:
+
+    bundle
+    bundle exec ruby bot.rb
+
+You may need to edit the bot connection url in bot.rb
