@@ -1,6 +1,7 @@
 require_relative './square'
 require_relative './map'
 require_relative './explorer'
+require_relative './path_finder'
 
 class Brain
   MAX_VIEW_DISTANCE = 3
@@ -9,7 +10,9 @@ class Brain
 
   def initialize
     @map = Map.new
-    @priority = [ Explorer.new(self) ]
+    @priority = []
+
+    new_priority Explorer
   end
 
   def tick(world)
@@ -18,6 +21,15 @@ class Brain
     world.tiles.each do |point|
       map.explore point, world
     end
+  end
+
+  def new_priority(klass, options = {})
+    state = klass.new(self, options)
+    @priority.unshift state
+  end
+
+  def finished_priority
+    @priority.shift
   end
 
   def decide_action(world)

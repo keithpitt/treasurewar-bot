@@ -40,6 +40,10 @@ class Point
     end
   end
 
+  def distance_from(point)
+    Distance.new(self, point).distance
+  end
+
   def <=> (point)
     if @x == point.x && @y == point
       0
@@ -56,5 +60,9 @@ class Point
 
   def inspect
     "(#{@type}:#{@x},#{@y})"
+  end
+
+  def walkable?
+    @type == 'floor'
   end
 end

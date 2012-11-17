@@ -42,8 +42,8 @@ class Square < Struct.new(:x1, :y1, :x2, :y2)
 
   def reset
     %w(x1 y1 x2 y2).each do |attr|
-      if send(attr) < 0
-        self.send("#{attr}=", 0)
+      if send(attr) <= 0
+        self.send("#{attr}=", 1)
       end
     end
   end

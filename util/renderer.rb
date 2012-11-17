@@ -27,24 +27,25 @@ class Renderer
           x = x + 1
           tile = (tiles[x] || [])[y]
 
-          # Is this flagged?
-          tile = 'flag' if (flags[x] || [])[y]
+          char = if tile
+                   type = tile.type
+                   if type == 'floor'
+                     "."
+                   elsif type == 'you'
+                     "@"
+                   elsif type == 'stash'
+                     "$"
+                   elsif type == 'item'
+                     "#"
+                   elsif type == 'wall' || type == 'space'
+                     "W"
+                   end
+                 end
 
-          char = if tile == 'floor'
-            "."
-          elsif tile == 'player'
-            "@"
-          elsif tile == 'stash'
-            "$"
-          elsif tile == 'flag'
-            "!"
-          elsif tile == 'wall' || tile == 'space'
-            "W"
-          else
-            ""
-          end
+          flag = (flags[x] || [])[y]
+          char = flag.char if flag
 
-          buffer << char.ljust(3)
+          buffer << (char || "").ljust(3)
         end
 
         buffer << "\n"

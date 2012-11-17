@@ -6,7 +6,7 @@ class You
     @name   = hash["name"]
     @score  = hash["score"]
     @carrying_treasure = hash["carrying_treasure"]
-    @position = Point.new(hash["position"])
+    @position = Point.new({ :type => 'you' }.merge(hash["position"]))
     @stash = Stash.new(hash["stash"])
   end
 end
