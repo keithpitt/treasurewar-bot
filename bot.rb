@@ -39,33 +39,17 @@ ui.start do
           perform_key = nil
         end
 
-        if true
-          # Bot logic goes here...
-          if world.nearby_players.any?
-            # Random bot likes to fight!
-            emit("attack", {
-              dir: world.nearby_players.first.direction_from(
-                world.position
-              )
-            })
-          else
-            # Random bot moves randomly!
-            emit("move", {
-              dir: brain.random_direction(world)
-            })
-          end
-        end
-
-        # Show UI
-        ui.puts Renderer.new(brain).world
-
-        ui.draw
-
         # Valid commands:
         # emit("move", {dir: "n"})
         # emit("attack", {dir: "ne"})
         # emit("pick up", {dir: "ne"})
         # emit("throw", {dir: "ne"})
+        action, options = brain.decide_action(world)
+        emit action, options
+
+        # Show UI
+        ui.puts Renderer.new(brain).world
+        ui.draw
       }
     end
 

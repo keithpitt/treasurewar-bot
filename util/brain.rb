@@ -55,4 +55,8 @@ class Brain
 
     start.direction_from(point)
   end
+
+  def decide_action(world)
+    return 'move', :dir => random_direction(world)
+  end
 end
