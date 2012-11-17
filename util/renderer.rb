@@ -26,7 +26,7 @@ class Renderer
           x = x + 1
           tile = (map[x] || [])[y]
           char = if tile == 'floor'
-            ","
+            "."
           elsif tile == 'player'
             "@"
           elsif tile == 'stash'
