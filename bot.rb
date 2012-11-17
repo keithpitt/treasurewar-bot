@@ -30,6 +30,9 @@ ui.start do
         # Start remembering stuffs
         brain.tick world
 
+        # Decide the action
+        action, options = brain.decide_action(world)
+
         # Show UI
         ui.puts Renderer.new(brain).world
 
@@ -47,7 +50,8 @@ ui.start do
         # emit("attack", {dir: "ne"})
         # emit("pick up", {dir: "ne"})
         # emit("throw", {dir: "ne"})
-        action, options = brain.decide_action(world)
+
+        # Finally perform the action
         emit action, options if action
 
         ui.draw
