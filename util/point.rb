@@ -7,6 +7,7 @@ class Point
   def initialize(hash)
     @x = hash["x"] || hash[:x]
     @y = hash["y"] || hash[:y]
+    @type = hash["type"] || hash[:type]
   end
 
   def direction_from(point)
@@ -54,6 +55,6 @@ class Point
   end
 
   def inspect
-    "(#{@x},#{@y})"
+    "(#{@type}:#{@x},#{@y})"
   end
 end

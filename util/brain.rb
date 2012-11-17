@@ -21,17 +21,16 @@ class Brain
   end
 
   def scan(point, world)
-    point_type = 'floor' # Assume the point is a floor
+    point_type = 'space' # Assume the point is a floor
 
-    # Is the point our current position?
+    # Is it something the world knows about? Or is it the player?
     if point == world.you.position
-      point_type = 'you'
-    end
-
-    # Is the point a wall?
-    world.walls.each do |wall|
-      if point == wall
-        point_type = 'wall'
+      point_type = 'player'
+    else
+      world.tiles.each do |tile|
+        if point == tile
+          point_type = tile.type
+        end
       end
     end
 
