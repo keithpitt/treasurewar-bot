@@ -23,8 +23,9 @@ class PathFinder
     @chosen_path ||= find_path(world)
 
     if @chosen_path.length == 0
-      @brain.finished_priority
+      return 'priority', :class => Explorer
     else
+      @brain.map.flag @destination, '!'
       return 'move', :dir => @chosen_path.shift
     end
   end

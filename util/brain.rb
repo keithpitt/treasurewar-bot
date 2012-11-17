@@ -33,6 +33,13 @@ class Brain
   end
 
   def decide_action(world)
-    @priority.first.decide_action(world)
+    action, options = @priority.first.decide_action(world)
+
+    while action == 'priority'
+      new_priority options.delete(:class), options
+      action, options = @priority.first.decide_action(world)
+    end
+
+    return action, options
   end
 end
