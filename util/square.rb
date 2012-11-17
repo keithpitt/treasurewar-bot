@@ -4,6 +4,17 @@ class Square < Struct.new(:x1, :y1, :x2, :y2)
     reset
   end
 
+  def center
+    if x1 == x2 && y1 == y1
+      Point.new(:x => x1, :y => y1)
+    else
+      center_x = x1 + ((x2 - x1) / 2)
+      center_y = y1 + ((y2 - y1) / 2)
+
+      Point.new(:x => center_x, :y => center_y)
+    end
+  end
+
   def pad(n)
     self.x1 = x1 - n
     self.y1 = y1 - n

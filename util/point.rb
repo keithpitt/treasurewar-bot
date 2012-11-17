@@ -1,4 +1,6 @@
 require "ir_b"
+require_relative "./distance"
+
 class Point
   attr_accessor :x, :y, :type
 
@@ -40,7 +42,7 @@ class Point
     end
   end
 
-  def distance_from(point)
+  def distance_to(point)
     Distance.new(self, point).distance
   end
 
@@ -55,6 +57,7 @@ class Point
   end
 
   def == (point)
+    return false if point.kind_of?(NilClass)
     @x == point.x && @y == point.y
   end
 

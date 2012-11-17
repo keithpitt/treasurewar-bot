@@ -10,9 +10,10 @@ class Explorer
   def random_direction(world)
     start = world.you.position
     scope = Square.new(start.x, start.y, start.x, start.y)
-    scope.pad(Brain::MAX_VIEW_DISTANCE + 1)
+    scope.pad(Brain::MAX_VIEW_DISTANCE)
 
-    random_point = scope.outer_points.sample
+    moveable_points = scope.outer_points.find_all { |point| @brain.map.find(point).walkable? }
+    random_point = moveable_points.sample
 
     @brain.new_priority PathFinder, :point => random_point
 
