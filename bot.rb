@@ -9,7 +9,7 @@ brain = Brain.new
 
 client = SocketIO.connect("http://localhost:8000") do
   before_start do
-    on_message {|message| puts "incoming message: #{message}"}
+    # on_message {|message| puts "incoming message: #{message}"}
 
     # You have about 1 second between each tick
     on_event('tick') { |game_state|

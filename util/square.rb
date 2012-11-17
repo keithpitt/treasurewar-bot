@@ -1,12 +1,7 @@
 class Square < Struct.new(:x1, :y1, :x2, :y2)
   def initialize(x1, y1, x2, y2)
     super
-
-    %w(x1 y1 x2 y2).each do |attr|
-      if send(attr) < 0
-        self.send("#{attr}=", 0)
-      end
-    end
+    reset
   end
 
   def pad(n)
@@ -14,6 +9,7 @@ class Square < Struct.new(:x1, :y1, :x2, :y2)
     self.y1 = y1 - n
     self.x2 = x2 + n
     self.y2 = y2 + n
+    reset
   end
 
   def area
@@ -28,5 +24,15 @@ class Square < Struct.new(:x1, :y1, :x2, :y2)
     end
 
     area
+  end
+
+  private
+
+  def reset
+    %w(x1 y1 x2 y2).each do |attr|
+      if send(attr) < 0
+        self.send("#{attr}=", 0)
+      end
+    end
   end
 end
