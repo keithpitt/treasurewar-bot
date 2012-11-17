@@ -1,11 +1,13 @@
 require_relative './area'
 
 class PathFinder
-  class PointWithParent < SimpleDelegator
+  class PointMoved < SimpleDelegator
     attr_accessor :parent
+    attr_accessor :g_cost
 
-    def initialize(object, parent)
+    def initialize(object, g_cost, parent)
       super(object)
+      @g_cost = g_cost
       @parent = parent
     end
   end
@@ -20,7 +22,7 @@ class PathFinder
   def decide_action(world)
     starting_point = world.you.position
     closed_list = []
-    open_list = [ PointWithParent.new(starting_point, nil) ]
+    open_list = [ PointMoved.new(starting_point, nil, nil) ]
     parent_point = nil
 
     found_destination = nil
@@ -60,19 +62,13 @@ class PathFinder
         end
       end
 
-      p [ current_point, lowest_f_cost, lowest_h_cost, lowest_g_cost ]
+      # p [ current_point, lowest_f_cost, lowest_h_cost, lowest_g_cost ]
 
-      current_point = PointWithParent.new(current_point, parent_point)
+      current_point = PointMoved.new(current_point, lowest_g_cost, parent_point)
 
       # Drop it from the open list and add it to the closed list
       open_list.delete(current_point)
       closed_list << current_point
-
-      if current_point == @destination
-        p 'found it!'
-        found_destination = current_point
-        break
-      end
 
       # Check all of the adjacent squares. Ignoring those that are on the closed list or unwalkable (terrain with walls, water, or other illegal terrain),
       # add squares to the open list if they are not on the open list already. Make the selected square the "parent" of the new squares
@@ -85,11 +81,10 @@ class PathFinder
       walkable_points_from(current_point).each do |point|
         # Do nothing if already on the closed list
         unless closed_list.include?(point)
-          point_with_parent = PointWithParent.new(point, current_point)
+          adjacent_g_cost = calculate_g_cost parent_point || current_point, point
+          point_with_parent = PointMoved.new(point, adjacent_g_cost, current_point)
 
-          if open_list.include?(point) && parent_point
-            adjacent_g_cost = calculate_g_cost parent_point, point
-
+          if open_list.include?(point)
             if adjacent_g_cost < lowest_g_cost
               point_with_parent.parent = point
             end
@@ -97,9 +92,17 @@ class PathFinder
             point_with_parent.parent = current_point
           end
 
+          if point_with_parent == @destination
+            p 'found it!'
+            found_destination = point_with_parent
+            break
+          end
+
           open_list << point_with_parent
         end
       end
+
+      break if found_destination
 
       parent_point = current_point
     end
@@ -110,10 +113,39 @@ class PathFinder
       path << parent
       parent = parent.parent
     end
+    path << starting_point
 
-    path.each do |point|
-      @brain.map.flag point, '~'
+    directions = []
+    for i in 0..path.length
+      point_after = path[i + 1]
+      if point_after
+        directions << point_after.direction_from(path[i])
+      end
     end
+
+    p directions
+
+    # Try and cut corners
+    optimized_path = []
+
+    i = 0
+    while i < directions.length
+      # Can we skip to the next one?
+      main = directions[i]
+      after = directions[i + 1]
+
+      skipped = "#{main}#{after}"
+
+      if skipped == "ne" || skipped == "nw" || skipped == "se" || skipped == "sw"
+        optimized_path << skipped.to_sym
+        i = i + 2
+      else
+        optimized_path << main
+        i = i + 1
+      end
+    end
+
+    p optimized_path
 
     @brain.map.flag @destination, '!'
   end
@@ -126,9 +158,15 @@ class PathFinder
   end
 
   def calculate_g_cost(starting_point, current_point)
+    base = if starting_point
+             starting_point.g_cost
+           else
+             0
+           end
+
     direction = current_point.direction_from(starting_point).to_s
 
-    if direction.length == 2
+    base + if direction.length == 2
       14
     else
       10
