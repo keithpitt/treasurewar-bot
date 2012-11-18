@@ -34,18 +34,11 @@ class PathFinder
     @chosen_path ||= find_path(world)
     @cached_path ||= @chosen_path.dup
 
-    #c = @starting_point
-    #@cached_path.each do |dir|
-      #p = c.position_after(dir.to_sym)
-      #@brain.map.color p, :black
-      #c = p
-    #end
-
-    p world.you.position
-    p @chosen_path
-    p @current_path
-    @current_path.each do |p|
+    c = @starting_point
+    @cached_path.each do |dir|
+      p = c.position_after(dir.to_sym)
       @brain.map.color p, :black
+      c = p
     end
 
     # If the destination is now known to be a wall, give up.
