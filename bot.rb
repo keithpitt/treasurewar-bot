@@ -31,15 +31,12 @@ ui.start do
           # Start remembering stuffs
           brain.tick world
 
-          # Pre render
-          ui.puts Renderer.new(brain).world
-
           # Decide the action
           action, options = brain.decide_action(world)
 
           # Show UI
           ui.reset
-          ui.puts Renderer.new(brain).world
+          ui.puts Renderer.new(brain).world(world)
 
           # Manual move
           #directions = { UI::KEY_UP => "n" , UI::KEY_DOWN => "s",

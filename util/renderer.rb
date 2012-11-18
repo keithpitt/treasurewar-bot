@@ -5,11 +5,12 @@ class Renderer
     @brain = brain
   end
 
-  def world
+  def world(world)
     tiles = @brain.map.tiles
     flags = @brain.map.flags
     colors = @brain.map.colors
     size = @brain.map.size + 1
+    players = world.players
     buffer = ""
 
     if tiles
@@ -36,10 +37,8 @@ class Renderer
                      "."
                    elsif type == 'stash'
                      "$"
-                   elsif type == 'treasure' || type == 'item'
+                   elsif type == 'item'
                      "#"
-                   elsif type == 'player'
-                     "^"
                    elsif type == 'wall' || type == 'space'
                      "W"
                    end
@@ -51,6 +50,13 @@ class Renderer
 
           # Is it the player
           char = '@' if tile == @brain.player.position
+
+          # Is it another player?
+          players.each do |p|
+            if p == tile
+              char = '^'
+            end
+          end
 
           # Pad it out
           char = (char || "").ljust(3)
