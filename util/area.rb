@@ -17,7 +17,7 @@ class Area < Struct.new(:map, :square)
     square.area.map do |point|
       found = map.find(point)
 
-      if found && (found.walkable? || found.unknown?) && found != square.center
+      if found && found.walkable? && found != square.center
         found
       end
     end.compact

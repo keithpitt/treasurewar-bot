@@ -17,7 +17,6 @@ class PathFinder
   def initialize(brain, options = {})
     @brain = brain
     @destination = options[:point]
-    @attempts = 0
 
     @known = []
   end
@@ -49,11 +48,6 @@ class PathFinder
       return false
     end
 
-    # If we've tried too many times, give up.
-    if @attempts > 10
-      return false
-    end
-
     if @chosen_path.length == 0
       return false
     else
@@ -67,7 +61,6 @@ class PathFinder
           return false
         else # It wasn't the destination. Try another path...
           reset
-          @attempts += 1
           decide_action(world) # Recalculate a new path
         end
       else
