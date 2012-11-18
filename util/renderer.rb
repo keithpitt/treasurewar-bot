@@ -36,7 +36,7 @@ class Renderer
                      "."
                    elsif type == 'stash'
                      "$"
-                   elsif type == 'treasure'
+                   elsif type == 'treasure' || type == 'item'
                      "#"
                    elsif type == 'player'
                      "^"
