@@ -14,9 +14,9 @@ class PathFinder
     end
   end
 
-  def initialize(brain, options = {})
+  def initialize(brain, destination)
     @brain = brain
-    @destination = options[:point]
+    @destination = destination
 
     @known = []
   end
@@ -28,7 +28,7 @@ class PathFinder
     @starting_point = nil
   end
 
-  def decide_action(world)
+  def tick(world)
     @brain.map.flag @destination, '!'
 
     @starting_point ||= world.you.position
@@ -61,7 +61,7 @@ class PathFinder
           return false
         else # It wasn't the destination. Try another path...
           reset
-          decide_action(world) # Recalculate a new path
+          tick(world) # Recalculate a new path
         end
       else
         return 'move', :dir => next_stop

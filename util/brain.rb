@@ -1,6 +1,7 @@
 require_relative './square'
 require_relative './map'
 require_relative './explorer'
+require_relative './wanderer'
 require_relative './path_finder'
 
 class Brain
@@ -11,9 +12,7 @@ class Brain
   def initialize
     @map = Map.new
     @player = nil
-    @priority = []
-
-    new_priority Explorer
+    @priority = [ Explorer.new(self), Wanderer.new(self) ]
   end
 
   def tick(world)
@@ -26,32 +25,13 @@ class Brain
     @player = world.you
   end
 
-  def new_priority(klass, options = {})
-    state = klass.new(self, options)
-    @priority.unshift state
-  end
-
-  def finished_priority
-    @priority.shift
-  end
-
   def decide_action(world)
-    priority = @priority.first
+    should_perform = @priority.find do |x|
+      x.do_something?
+    end
 
-    if priority
-      action, options = priority.decide_action(world)
-
-      if action == false
-        finished_priority
-        decide_action(world)
-      elsif action.kind_of?(String)
-        while action == 'priority'
-          new_priority options.delete(:class), options
-          action, options = @priority.first.decide_action(world)
-        end
-
-        return action, options
-      end
+    if should_perform
+      should_perform.decide_action(world)
     end
   end
 end

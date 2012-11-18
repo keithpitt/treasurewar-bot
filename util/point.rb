@@ -66,7 +66,7 @@ class Point
   end
 
   def walkable?
-    @type != 'wall'
+    @type && @type != 'wall'
   end
 
   def floor?
