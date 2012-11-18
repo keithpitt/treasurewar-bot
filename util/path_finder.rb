@@ -85,7 +85,7 @@ class PathFinder
 
   def find_path(world)
     closed_list = []
-    open_list = [ PointMoved.new(@starting_point, nil, nil) ]
+    open_list = [ PointMoved.new(@starting_point, 0, nil) ]
     parent_point = nil
     counter = 0
     been_there = {}
@@ -130,10 +130,6 @@ class PathFinder
           end
         end
       end
-
-      # p [ current_point, lowest_f_cost, lowest_h_cost, lowest_g_cost ]
-
-      current_point = PointMoved.new(current_point, lowest_g_cost, parent_point)
 
       # Drop it from the open list and add it to the closed list
       open_list.delete(current_point)
