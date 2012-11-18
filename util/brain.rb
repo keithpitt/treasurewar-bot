@@ -38,8 +38,6 @@ class Brain
   def decide_action(world)
     priority = @priority.first
 
-    p @map.tiles
-
     if priority
       action, options = priority.decide_action(world)
 
@@ -54,8 +52,6 @@ class Brain
 
         return action, options
       end
-    else
-      p @map.tiles
     end
   end
 end

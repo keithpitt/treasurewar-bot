@@ -23,47 +23,52 @@ ui.start do
 
       # You have about 1 second between each tick
       on_event('tick') { |game_state|
-        ui.reset
+        begin
+          ui.reset
 
-        world = World.new(game_state.first)
+          world = World.new(game_state.first)
 
-        # Start remembering stuffs
-        brain.tick world
+          # Start remembering stuffs
+          brain.tick world
 
-        # Pre render
-        ui.puts Renderer.new(brain).world
+          # Pre render
+          ui.puts Renderer.new(brain).world
 
-        # Decide the action
-        action, options = brain.decide_action(world)
+          # Decide the action
+          action, options = brain.decide_action(world)
 
-        # Show UI
-        ui.reset
-        ui.puts Renderer.new(brain).world
+          # Show UI
+          ui.reset
+          ui.puts Renderer.new(brain).world
 
-        # Manual move
-        #directions = { UI::KEY_UP => "n" , UI::KEY_DOWN => "s",
-                       #UI::KEY_LEFT => "w", UI::KEY_RIGHT => "e" }
+          # Manual move
+          #directions = { UI::KEY_UP => "n" , UI::KEY_DOWN => "s",
+                         #UI::KEY_LEFT => "w", UI::KEY_RIGHT => "e" }
 
-        #if perform_key && d = directions[perform_key]
-          #emit "move", :dir => d
-          #perform_key = nil
-        #end
+          #if perform_key && d = directions[perform_key]
+            #emit "move", :dir => d
+            #perform_key = nil
+          #end
 
-        # Valid commands:
-        # emit("move", {dir: "n"})
-        # emit("attack", {dir: "ne"})
-        # emit("pick up", {dir: "ne"})
-        # emit("throw", {dir: "ne"})
+          # Valid commands:
+          # emit("move", {dir: "n"})
+          # emit("attack", {dir: "ne"})
+          # emit("pick up", {dir: "ne"})
+          # emit("throw", {dir: "ne"})
 
-        # Finally perform the action
-        emit action, options if action
+          # Finally perform the action
+          emit action, options if action
 
-        ui.draw
+          ui.draw
+        rescue
+          p brain.map.tiles
+          exit
+        end
       }
     end
 
     after_start do
-      emit("set name", "sparrow")
+      emit("set name", "keithpitt")
     end
   end
 end
