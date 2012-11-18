@@ -16,18 +16,18 @@ class Renderer
       # Header
       buffer << "".ljust(3)
       size.times do |x|
-        x = x + 1
+        x = x
         buffer << x.to_s.ljust(3)
       end
       buffer << "\n"
 
       # Down
       size.times do |y|
-        y = y + 1
+        y = y
         buffer << y.to_s.ljust(3)
 
         size.times do |x|
-          x = x + 1
+          x = x
           tile = (tiles[x] || [])[y]
 
           char = if tile
