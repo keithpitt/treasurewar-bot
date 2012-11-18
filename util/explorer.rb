@@ -1,21 +1,18 @@
+require_relative './points'
+
 class Explorer
   def initialize(brain, options = {})
     @brain = brain
   end
 
-  def do_something?
+  def do_something?(world)
     calc_unknowns.any? || @path_finder
   end
 
   def decide_point(world)
     unknowns = calc_unknowns
     if unknowns.any?
-      starting_point = world.you.position
-      sorted_unknowns = unknowns.sort do |a, b|
-        Distance.new(starting_point, a).manhatten <=> Distance.new(starting_point, b).manhatten
-      end
-
-      sorted_unknowns.first
+      Points.new(unknowns).closest_to(world.you.position).first
     end
   end
 

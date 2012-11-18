@@ -1,5 +1,5 @@
 class Wanderer < Explorer
-  def do_something?
+  def do_something?(world)
     true
   end
 

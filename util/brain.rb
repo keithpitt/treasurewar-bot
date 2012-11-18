@@ -3,6 +3,9 @@ require_relative './map'
 require_relative './explorer'
 require_relative './wanderer'
 require_relative './path_finder'
+require_relative './hunter'
+require_relative './pickup'
+require_relative './takeback'
 
 class Brain
   MAX_VIEW_DISTANCE = 3
@@ -12,7 +15,13 @@ class Brain
   def initialize
     @map = Map.new
     @player = nil
-    @priority = [ Explorer.new(self), Wanderer.new(self) ]
+    @priority = [
+      Takeback.new(self),
+      Pickup.new(self),
+      Hunter.new(self),
+      Explorer.new(self),
+      Wanderer.new(self)
+    ]
   end
 
   def tick(world)
@@ -27,7 +36,7 @@ class Brain
 
   def decide_action(world)
     should_perform = @priority.find do |x|
-      x.do_something?
+      x.do_something?(world)
     end
 
     if should_perform
