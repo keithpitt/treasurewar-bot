@@ -194,7 +194,7 @@ class PathFinder
 
     @current_path = path
 
-    calculate_directions(path)
+    optimize_directions calculate_directions(path)
   end
 
   def calculate_directions(path)
