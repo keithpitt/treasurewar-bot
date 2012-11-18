@@ -15,14 +15,16 @@ class Explorer
       end
     end.flatten
 
-    unknowns.each do |u|
-      @brain.map.flag u, '*'
-    end
+    starting_point = world.you.position
 
     if !unknowns.empty?
-      point = unknowns.sample
-      return 'priority', :class => PathFinder, :point => unknowns.sample
+      sorted_unknowns = unknowns.sort do |a, b|
+        Distance.new(starting_point, a).manhatten <=> Distance.new(starting_point, b).manhatten
+      end
+
+      return 'priority', :class => PathFinder, :point => sorted_unknowns.first
     else
+      false
     end
   end
 end

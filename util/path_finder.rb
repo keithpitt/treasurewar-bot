@@ -253,20 +253,6 @@ class PathFinder
   end
 
   def calculate_h_cost(starting_point, finishing_point)
-    vertical = (starting_point.x - finishing_point.x).abs
-    if vertical % 3 == 0
-      vertical += 1
-    else
-      vertical
-    end
-
-    horizontal = (starting_point.y - finishing_point.y).abs
-    if horizontal % 3 == 0
-      horizontal += 1
-    else
-      horizontal
-    end
-
-    vertical + horizontal
+    Distance.new(starting_point, finishing_point).manhatten
   end
 end
