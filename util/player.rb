@@ -3,7 +3,6 @@ require_relative "./point"
 class Player < Point
   attr_reader :health, :name, :carrying_treasure, :score
   def initialize(hash)
-    p hash
     @health = hash["health"]
     @name   = hash["name"]
     @score  = hash["score"]
@@ -16,5 +15,10 @@ class Player < Point
 
   def carrying_treasure?
     @carrying_treasure
+  end
+
+  def inspect
+    x = super
+    "(#{@name}/#{@health})#{x}"
   end
 end

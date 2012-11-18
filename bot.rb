@@ -16,11 +16,16 @@ ui.on_key do |key|
   ui.puts key
 end
 
+messages = []
+
 ui.start do
   # client = SocketIO.connect("http://localhost:8000") do
   client = SocketIO.connect("http://treasurewar:8000") do
     before_start do
-      on_message {|message| puts "incoming message: #{message}"}
+      on_message do |message|
+        p message
+        messages << message
+      end
 
       # You have about 1 second between each tick
       on_event('tick') { |game_state|
@@ -37,6 +42,8 @@ ui.start do
 
           # Show UI
           ui.puts Renderer.new(brain).world(world)
+
+          p world.messages
 
           # Manual move
           #directions = { UI::KEY_UP => "n" , UI::KEY_DOWN => "s",

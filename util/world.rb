@@ -6,7 +6,7 @@ require_relative "./player"
 require "ir_b"
 
 class World
-  attr_accessor :players, :nearby_items, :nearby_treasure, :nearby_stashes
+  attr_accessor :players, :nearby_items, :nearby_treasure, :nearby_stashes, :messages
   attr_accessor :you
   attr_accessor :tiles
 
@@ -14,6 +14,7 @@ class World
 
   def initialize(state)
     @you = You.new(state["you"])
+    @messages = state['messages']
 
     @tiles = []
     for tile in state["tiles"]

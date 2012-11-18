@@ -9,4 +9,9 @@ class You
     @position = Point.new({ :type => 'you' }.merge(hash["position"]))
     @stash = Stash.new(hash["stash"])
   end
+
+  def inspect
+    x = super
+    "(#{@name}/#{@health})#{x}"
+  end
 end

@@ -30,6 +30,22 @@ class Point
     end
   end
 
+  def next_to?(point)
+    dx = point.x - @x
+    dy = point.y - @y
+    case [dx <=> 0, dy <=> 0]
+    when [0, -1] then true
+    when [1, -1] then true
+    when [1, 0] then true
+    when [1, 1] then true
+    when [0, 1] then true
+    when [-1, 1] then true
+    when [-1, 0] then true
+    when [-1, -1] then true
+    when [0, 0] then false
+    end
+  end
+
   def position_after(direction)
     case direction
     when :n  then FakePoint.new(x: @x    , y: @y - 1)

@@ -8,6 +8,7 @@ require_relative './hunter'
 require_relative './pickup'
 require_relative './takeback'
 require_relative './dropoff'
+require_relative './attacker'
 require_relative './stealer'
 
 class Brain
@@ -19,6 +20,7 @@ class Brain
     @map = Map.new
     @player = nil
     @priority = [
+      Attacker.new(self),
       Dropoff.new(self),
       Takeback.new(self),
       Pickup.new(self),

@@ -5,6 +5,8 @@ class Distance < Struct.new(:p1, :p2)
   end
 
   def manhatten
+    return 0  if p1 == p2
+
     vertical = (p1.x - p2.x).abs
     if vertical % 3 == 0
       vertical += 1
