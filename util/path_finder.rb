@@ -23,21 +23,29 @@ class PathFinder
 
   def decide_action(world)
     @chosen_path ||= find_path(world)
+    @cached_path ||= @chosen_path.dup
 
-    @current_path.each do |p|
-      @brain.map.color p, 'black'
+    c = @starting_point
+    @cached_path.each do |dir|
+      p = c.position_after(dir.to_sym)
+      @brain.map.color p, :black
+
+      c = p
     end
 
     if @chosen_path.length == 0
       return 'priority', :class => Explorer
     else
       @brain.map.flag @destination, '!'
-      return 'move', :dir => @chosen_path.shift
+      next_stop = @chosen_path.shift
+
+      return 'move', :dir => next_stop
     end
   end
 
   def find_path(world)
     starting_point = world.you.position
+    @starting_point ||= starting_point
     closed_list = []
     open_list = [ PointMoved.new(starting_point, nil, nil) ]
     parent_point = nil
