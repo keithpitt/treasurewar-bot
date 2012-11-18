@@ -21,7 +21,15 @@ class PathFinder
     @known = []
   end
 
+  def reset
+    @chosen_path = nil
+    @cached_path = nil
+    @current_path = nil
+    @starting_position = nil
+  end
+
   def decide_action(world)
+    @starting_point ||= world.you.position
     @chosen_path ||= find_path(world)
     @cached_path ||= @chosen_path.dup
 
@@ -29,25 +37,35 @@ class PathFinder
     @cached_path.each do |dir|
       p = c.position_after(dir.to_sym)
       @brain.map.color p, :black
-
       c = p
     end
 
     if @chosen_path.length == 0
-      return 'priority', :class => Explorer
+      return false
     else
       @brain.map.flag @destination, '!'
-      next_stop = @chosen_path.shift
 
-      return 'move', :dir => next_stop
+      # Are we about to walk into a wall? If so, re-evaulate path.
+      next_stop = @chosen_path.shift
+      next_point = @brain.map.find world.you.position.position_after(next_stop)
+
+      if next_point.type == 'wall'
+        # Ah, so now the next point is a wall. the question is. was it the destination?
+        if next_point == @destination
+          return false
+        else # It wasn't the destination. Try another path...
+          reset
+          decide_action(world) # Recalculate a new path
+        end
+      else
+        return 'move', :dir => next_stop
+      end
     end
   end
 
   def find_path(world)
-    starting_point = world.you.position
-    @starting_point ||= starting_point
     closed_list = []
-    open_list = [ PointMoved.new(starting_point, nil, nil) ]
+    open_list = [ PointMoved.new(@starting_point, nil, nil) ]
     parent_point = nil
 
     found_destination = nil
@@ -132,7 +150,7 @@ class PathFinder
     unless found_destination
       p open_list
       p closed_list
-      p starting_point
+      p @starting_point
       p @destination
       raise 'cant find it'
     end
@@ -143,7 +161,7 @@ class PathFinder
       path << parent
       parent = parent.parent
     end
-    path << starting_point
+    path << @starting_point
 
     @current_path = path
 
