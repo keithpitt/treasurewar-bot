@@ -40,7 +40,14 @@ class Map
     @tiles[point.x] ||= []
     existing = @tiles[point.x][point.y]
 
+    # you are floor
     if point.type == 'you'
+      point = point.dup
+      point.type = 'floor'
+    end
+
+    # treasure is floor
+    if point.type == 'treasure'
       point = point.dup
       point.type = 'floor'
     end

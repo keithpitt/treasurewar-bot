@@ -30,6 +30,8 @@ class PathFinder
   end
 
   def decide_action(world)
+    @brain.map.flag @destination, '!'
+
     @starting_point ||= world.you.position
     @chosen_path ||= find_path(world)
     @cached_path ||= @chosen_path.dup
@@ -55,8 +57,6 @@ class PathFinder
     if @chosen_path.length == 0
       return false
     else
-      @brain.map.flag @destination, '!'
-
       # Are we about to walk into a wall? If so, re-evaulate path.
       next_stop = @chosen_path.shift
       next_point = @brain.map.find world.you.position.position_after(next_stop)
@@ -86,10 +86,6 @@ class PathFinder
     found_destination = nil
 
     while !open_list.empty?
-      if counter > 200
-        break
-      end
-
       current_point = nil
       lowest_f_cost = nil
       lowest_h_cost = nil
@@ -165,8 +161,6 @@ class PathFinder
       break if found_destination
 
       parent_point = current_point
-
-      counter = counter + 1
     end
 
     unless found_destination
@@ -174,6 +168,7 @@ class PathFinder
       p closed_list
       p @starting_point
       p @destination
+      p @brain.map.tiles
       raise 'cant find it'
     end
 
