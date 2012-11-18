@@ -7,6 +7,7 @@ class Hunter < Explorer
 
     # Near an item
     item = closest_item(world)
+    p item
     return true if item
 
     false

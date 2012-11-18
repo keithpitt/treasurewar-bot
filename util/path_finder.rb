@@ -70,6 +70,9 @@ class PathFinder
   end
 
   def find_path(world)
+    # Are we already theere?
+    return [] if @destination == @starting_point
+
     closed_list = []
     open_list = [ PointMoved.new(@starting_point, 0, nil) ]
     parent_point = nil
@@ -126,7 +129,7 @@ class PathFinder
       # (in the diagram above, change the direction of the pointer to point at the selected square). Finally, recalculate both the F and G
       # scores of that square. If this seems confusing, you will see it illustrated below.
       walkable_points = kind_of_walkable_points_from(current_point)
-      p [ current_point, walkable_points ]
+
       walkable_points.each do |adjacent_square|
         next if been_there[adjacent_square]
 

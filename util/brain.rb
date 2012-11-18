@@ -1,11 +1,13 @@
 require_relative './square'
 require_relative './map'
+require_relative './path_finder'
+
 require_relative './explorer'
 require_relative './wanderer'
-require_relative './path_finder'
 require_relative './hunter'
 require_relative './pickup'
 require_relative './takeback'
+require_relative './dropoff'
 
 class Brain
   MAX_VIEW_DISTANCE = 3
@@ -16,6 +18,7 @@ class Brain
     @map = Map.new
     @player = nil
     @priority = [
+      Dropoff.new(self),
       Takeback.new(self),
       Pickup.new(self),
       Hunter.new(self),

@@ -4,7 +4,7 @@ class Dropoff
   end
 
   def do_something?(world)
-    p world
+    p world.you.position && world.you.stash
     world.you.carrying_treasure && (world.you.position == world.you.stash)
   end
 

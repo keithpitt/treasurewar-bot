@@ -51,12 +51,18 @@ class Renderer
           # Is it the player
           char = '@' if tile == @brain.player.position
 
+          # Carrying something?
+          char = '@@' if tile == @brain.player.position && @brain.player.carrying_treasure
+
           # Is it another player?
           players.each do |p|
             if p == tile
               char = '^'
             end
           end
+
+          # Players stash?
+          char = '[]' if tile == world.you.stash
 
           # Pad it out
           char = (char || "").ljust(3)
