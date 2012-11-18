@@ -23,7 +23,7 @@ ui.start do
 
       # You have about 1 second between each tick
       on_event('tick') { |game_state|
-        # ui.reset
+        ui.reset
 
         world = World.new(game_state.first)
 
