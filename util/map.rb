@@ -1,5 +1,6 @@
 require_relative './square'
 require_relative './flag'
+require_relative './fake_point'
 
 class Map
   attr_reader :tiles, :size, :flags, :points, :colors
@@ -21,8 +22,8 @@ class Map
       point = world.you.position
     end
 
-    @lowest_point = Point.new(:x => point.x, :y => point.y) unless @lowest_point
-    @highest_point = Point.new(:x => point.x, :y => point.y) unless @highest_point
+    @lowest_point = FakePoint.new(:x => point.x, :y => point.y) unless @lowest_point
+    @highest_point = FakePoint.new(:x => point.x, :y => point.y) unless @highest_point
     @lowest_point.x = point.x if point.x < @lowest_point.x
     @lowest_point.y = point.y if point.y < @lowest_point.y
     @highest_point.x = point.x if point.x > @highest_point.x
@@ -39,18 +40,6 @@ class Map
   def store(point)
     @tiles[point.x] ||= []
     existing = @tiles[point.x][point.y]
-
-    # you are floor
-    if point.type == 'you'
-      point = point.dup
-      point.type = 'floor'
-    end
-
-    # treasure is floor
-    if point.type == 'treasure'
-      point = point.dup
-      point.type = 'floor'
-    end
 
     unless existing
       existing = @tiles[point.x][point.y] = point

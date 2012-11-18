@@ -7,9 +7,11 @@ class Point
   include Comparable
 
   def initialize(hash)
-    @x = hash["x"] || hash[:x]
-    @y = hash["y"] || hash[:y]
-    @type = hash["type"] || hash[:type]
+    @x ||= hash["x"] || hash[:x]
+    @y ||= hash["y"] || hash[:y]
+    @type ||= hash["type"] || hash[:type]
+
+    raise 'need a type' unless @type
   end
 
   def direction_from(point)
@@ -30,14 +32,14 @@ class Point
 
   def position_after(direction)
     case direction
-    when :n  then Point.new(x: @x    , y: @y - 1)
-    when :ne then Point.new(x: @x + 1, y: @y - 1)
-    when :e  then Point.new(x: @x + 1, y: @y)
-    when :se then Point.new(x: @x + 1, y: @y + 1)
-    when :s  then Point.new(x: @x    , y: @y + 1)
-    when :sw then Point.new(x: @x - 1, y: @y + 1)
-    when :w  then Point.new(x: @x - 1, y: @y)
-    when :nw then Point.new(x: @x - 1, y: @y - 1)
+    when :n  then FakePoint.new(x: @x    , y: @y - 1)
+    when :ne then FakePoint.new(x: @x + 1, y: @y - 1)
+    when :e  then FakePoint.new(x: @x + 1, y: @y)
+    when :se then FakePoint.new(x: @x + 1, y: @y + 1)
+    when :s  then FakePoint.new(x: @x    , y: @y + 1)
+    when :sw then FakePoint.new(x: @x - 1, y: @y + 1)
+    when :w  then FakePoint.new(x: @x - 1, y: @y)
+    when :nw then FakePoint.new(x: @x - 1, y: @y - 1)
     else raise("Invalid direction #{direction.to_s}")
     end
   end

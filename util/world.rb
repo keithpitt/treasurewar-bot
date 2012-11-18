@@ -17,7 +17,8 @@ class World
 
     @tiles = []
     for tile in state["tiles"]
-      @tiles.push Point.new(tile)
+      type = tile['type'] || 'wall'
+      @tiles.push Point.new(:x => tile['x'].to_i, :y => tile['y'].to_i, :type => type)
     end
 
     @nearby_players = []

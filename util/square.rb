@@ -6,12 +6,12 @@ class Square < Struct.new(:x1, :y1, :x2, :y2)
 
   def center
     if x1 == x2 && y1 == y1
-      Point.new(:x => x1, :y => y1)
+      FakePoint.new(:x => x1, :y => y1)
     else
       center_x = x1 + ((x2 - x1) / 2)
       center_y = y1 + ((y2 - y1) / 2)
 
-      Point.new(:x => center_x, :y => center_y)
+      FakePoint.new(:x => center_x, :y => center_y)
     end
   end
 
@@ -31,7 +31,7 @@ class Square < Struct.new(:x1, :y1, :x2, :y2)
     area = []
     x.length.times do |i|
       y.length.times do |ii|
-        area << Point.new(:x => x[i], :y => y[ii])
+        area << FakePoint.new(:x => x[i], :y => y[ii])
       end
     end
 

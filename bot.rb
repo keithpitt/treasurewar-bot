@@ -17,7 +17,7 @@ ui.on_key do |key|
 end
 
 ui.start do
-  client = SocketIO.connect("http://localhost:8000") do
+  client = SocketIO.connect("http://treasure-war:8000") do
     before_start do
       # on_message {|message| puts "incoming message: #{message}"}
 
