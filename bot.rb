@@ -17,9 +17,9 @@ ui.on_key do |key|
 end
 
 ui.start do
-  client = SocketIO.connect("http://treasure-war:8000") do
+  client = SocketIO.connect("http://localhost:8000") do
     before_start do
-      # on_message {|message| puts "incoming message: #{message}"}
+      on_message {|message| puts "incoming message: #{message}"}
 
       # You have about 1 second between each tick
       on_event('tick') { |game_state|
@@ -35,7 +35,6 @@ ui.start do
           action, options = brain.decide_action(world)
 
           # Show UI
-          ui.reset
           ui.puts Renderer.new(brain).world(world)
 
           # Manual move

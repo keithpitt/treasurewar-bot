@@ -1,18 +1,15 @@
-require_relative './points'
-
-class Pickup
+class Dropoff
   def initialize(brain)
     @brain = brain
   end
 
   def do_something?(world)
-    !!on_top_of_item(world)
+    p world
+    world.you.carrying_treasure && (world.you.position == world.you.stash)
   end
 
   def decide_action(world)
-    item = on_top_of_item(world)
-
-    return "pick up", {}
+    return "drop", {}
   end
 
   private

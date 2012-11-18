@@ -5,7 +5,7 @@ class You
     @health = hash["health"]
     @name   = hash["name"]
     @score  = hash["score"]
-    @carrying_treasure = hash["carrying_treasure"]
+    @carrying_treasure = !!hash["item_in_hand"]
     @position = Point.new({ :type => 'you' }.merge(hash["position"]))
     @stash = Stash.new(hash["stash"])
   end

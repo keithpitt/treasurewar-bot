@@ -2,10 +2,9 @@ require_relative './points'
 
 class Takeback < Explorer
   def do_something?(world)
+    p 'do something'
     # Currently walking?
     return true if @path_finder
-
-    p world.you.carrying_treasure
 
     # Have stash?
     return true if world.you.carrying_treasure
@@ -14,6 +13,6 @@ class Takeback < Explorer
   end
 
   def decide_point(world)
-    raise 'arg go home'
+    world.you.stash
   end
 end

@@ -16,6 +16,10 @@ class Explorer
     end
   end
 
+  def reset
+    @path_finder = nil
+  end
+
   def decide_action(world)
     if @path_finder
       tick = @path_finder.tick(world)

@@ -25,6 +25,7 @@ class Brain
   end
 
   def tick(world)
+    p "ticking #{Time.now.to_i}"
     map.clear_flags
 
     world.tiles.each do |point|
@@ -35,12 +36,18 @@ class Brain
   end
 
   def decide_action(world)
-    should_perform = @priority.find do |x|
-      x.do_something?(world)
+    chosen = false
+    action, options = nil
+
+    @priority.each do |x|
+      if !chosen && x.do_something?(world)
+        action, options = x.decide_action(world)
+        chosen = true
+      else
+        x.reset if x.respond_to?(:reset)
+      end
     end
 
-    if should_perform
-      should_perform.decide_action(world)
-    end
+    return action, options
   end
 end
