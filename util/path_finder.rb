@@ -34,11 +34,18 @@ class PathFinder
     @chosen_path ||= find_path(world)
     @cached_path ||= @chosen_path.dup
 
-    c = @starting_point
-    @cached_path.each do |dir|
-      p = c.position_after(dir.to_sym)
+    #c = @starting_point
+    #@cached_path.each do |dir|
+      #p = c.position_after(dir.to_sym)
+      #@brain.map.color p, :black
+      #c = p
+    #end
+
+    p world.you.position
+    p @chosen_path
+    p @current_path
+    @current_path.each do |p|
       @brain.map.color p, :black
-      c = p
     end
 
     # If the destination is now known to be a wall, give up.
@@ -81,6 +88,7 @@ class PathFinder
     open_list = [ PointMoved.new(@starting_point, nil, nil) ]
     parent_point = nil
     counter = 0
+    been_there = {}
 
     found_destination = nil
 
@@ -140,16 +148,18 @@ class PathFinder
       # (in the diagram above, change the direction of the pointer to point at the selected square). Finally, recalculate both the F and G
       # scores of that square. If this seems confusing, you will see it illustrated below.
       walkable_points = kind_of_walkable_points_from(current_point)
-      walkable_points.each do |point|
-        # Do nothing if already on the closed list
-        unless closed_list.include?(point)
-          adjacent_g_cost = calculate_g_cost parent_point || current_point, point
-          point_with_parent = PointMoved.new(point, adjacent_g_cost, current_point)
+      walkable_points.each do |adjacent_square|
+        next if been_there[adjacent_square]
 
-          if open_list.include?(point)
-            #if adjacent_g_cost < lowest_g_cost
-              #point_with_parent.parent = point
-            #end
+        # Do nothing if already on the closed list
+        unless closed_list.include?(adjacent_square)
+          adjacent_g_cost = calculate_g_cost current_point, adjacent_square
+          point_with_parent = PointMoved.new(adjacent_square, adjacent_g_cost, current_point)
+
+          if open_list.include?(adjacent_square)
+            if adjacent_g_cost <= lowest_g_cost
+              point_with_parent.parent = current_point
+            end
           end
 
           if point_with_parent == @destination
@@ -159,6 +169,8 @@ class PathFinder
 
           open_list << point_with_parent
         end
+
+        been_there[adjacent_square] = true
       end
 
       break if found_destination
@@ -238,12 +250,16 @@ class PathFinder
              0
            end
 
-    direction = current_point.direction_from(starting_point).to_s
+    if starting_point
+      direction = current_point.direction_from(starting_point).to_s
 
-    base + if direction.length == 2
-      14
+      base + if direction.length == 2
+        14
+      else
+        10
+      end
     else
-      10
+      0
     end
   end
 
