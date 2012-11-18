@@ -9,7 +9,7 @@ class Renderer
     tiles = @brain.map.tiles
     flags = @brain.map.flags
     colors = @brain.map.colors
-    size = @brain.map.size
+    size = @brain.map.size + 1
     buffer = ""
 
     if tiles
