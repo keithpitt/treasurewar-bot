@@ -15,6 +15,10 @@ class Explorer
       end
     end.flatten
 
+    unknowns.each do |u|
+      @brain.map.flag u, '*'
+    end
+
     if !unknowns.empty?
       point = unknowns.sample
       return 'priority', :class => PathFinder, :point => unknowns.sample
