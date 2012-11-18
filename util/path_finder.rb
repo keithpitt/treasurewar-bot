@@ -76,12 +76,13 @@ class PathFinder
     closed_list = []
     open_list = [ PointMoved.new(@starting_point, 0, nil) ]
     parent_point = nil
-    counter = 0
     been_there = {}
 
     found_destination = nil
 
     while !open_list.empty?
+
+      p [ @starting_point, @destination ]
       current_point = nil
       lowest_f_cost = nil
       lowest_h_cost = nil

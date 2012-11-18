@@ -6,7 +6,7 @@ require_relative "./player"
 require "ir_b"
 
 class World
-  attr_accessor :players, :nearby_items, :nearby_treasure
+  attr_accessor :players, :nearby_items, :nearby_treasure, :nearby_stashes
   attr_accessor :you
   attr_accessor :tiles
 
@@ -24,6 +24,11 @@ class World
     @players = []
     for player in state["nearby_players"]
       @players.push Player.new(player)
+    end
+
+    @nearby_stashes = []
+    for item in state["nearby_stashes"]
+      @nearby_stashes.push Stash.new(item)
     end
 
     @nearby_items = []

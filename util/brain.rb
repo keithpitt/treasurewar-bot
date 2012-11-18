@@ -8,6 +8,7 @@ require_relative './hunter'
 require_relative './pickup'
 require_relative './takeback'
 require_relative './dropoff'
+require_relative './stealer'
 
 class Brain
   MAX_VIEW_DISTANCE = 3
@@ -21,6 +22,7 @@ class Brain
       Dropoff.new(self),
       Takeback.new(self),
       Pickup.new(self),
+      # Stealer.new(self),
       Hunter.new(self),
       Explorer.new(self),
       Wanderer.new(self)
@@ -44,6 +46,7 @@ class Brain
 
     @priority.each do |x|
       if !chosen && x.do_something?(world)
+        p x.class.name
         action, options = x.decide_action(world)
         chosen = true
       else
