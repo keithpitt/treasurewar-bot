@@ -36,19 +36,26 @@ class Brain
   end
 
   def decide_action(world)
-    action, options = @priority.first.decide_action(world)
+    priority = @priority.first
 
-    if action == false
-      p 'finished doing something'
-      finished_priority
-      decide_action(world)
-    elsif action.kind_of?(String)
-      while action == 'priority'
-        new_priority options.delete(:class), options
-        action, options = @priority.first.decide_action(world)
+    p @map.tiles
+
+    if priority
+      action, options = priority.decide_action(world)
+
+      if action == false
+        finished_priority
+        decide_action(world)
+      elsif action.kind_of?(String)
+        while action == 'priority'
+          new_priority options.delete(:class), options
+          action, options = @priority.first.decide_action(world)
+        end
+
+        return action, options
       end
-
-      return action, options
+    else
+      p @map.tiles
     end
   end
 end
