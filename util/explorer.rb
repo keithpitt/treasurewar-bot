@@ -26,7 +26,8 @@ class Explorer
       if tick
         return tick
       else
-        @path_finder = nil
+        reset
+        return false
       end
     end
 

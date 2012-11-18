@@ -17,8 +17,6 @@ class PathFinder
   def initialize(brain, destination)
     @brain = brain
     @destination = destination
-
-    @known = []
   end
 
   def reset
@@ -81,7 +79,6 @@ class PathFinder
     found_destination = nil
 
     while !open_list.empty?
-
       p [ @starting_point, @destination ]
       current_point = nil
       lowest_f_cost = nil
