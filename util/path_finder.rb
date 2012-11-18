@@ -25,7 +25,7 @@ class PathFinder
     @chosen_path = nil
     @cached_path = nil
     @current_path = nil
-    @starting_position = nil
+    @starting_point = nil
   end
 
   def decide_action(world)
