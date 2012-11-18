@@ -12,11 +12,6 @@ class Attacker
     enemy = next_to_enemy(world)
     attack_direction = player.direction_from(enemy)
 
-    p player
-    p enemy
-
-    p attack_direction
-
     return "attack", { dir: attack_direction }
   end
 
@@ -30,7 +25,6 @@ class Attacker
 
     square.outer_points.each do |point|
       world.players.each do |enemy|
-        p [ point, p ]
         if point == enemy
           enemies.push enemy
         end
