@@ -17,6 +17,7 @@ class PathFinder
   def initialize(brain, options = {})
     @brain = brain
     @destination = options[:point]
+    @attempts = 0
 
     @known = []
   end
@@ -40,6 +41,17 @@ class PathFinder
       c = p
     end
 
+    # If the destination is now known to be a wall, give up.
+    real_destination = @brain.map.find(@destination)
+    if real_destination.type == 'wall'
+      return false
+    end
+
+    # If we've tried too many times, give up.
+    if @attempts > 10
+      return false
+    end
+
     if @chosen_path.length == 0
       return false
     else
@@ -55,6 +67,7 @@ class PathFinder
           return false
         else # It wasn't the destination. Try another path...
           reset
+          @attempts += 1
           decide_action(world) # Recalculate a new path
         end
       else
@@ -67,10 +80,15 @@ class PathFinder
     closed_list = []
     open_list = [ PointMoved.new(@starting_point, nil, nil) ]
     parent_point = nil
+    counter = 0
 
     found_destination = nil
 
     while !open_list.empty?
+      if counter > 200
+        break
+      end
+
       current_point = nil
       lowest_f_cost = nil
       lowest_h_cost = nil
@@ -121,7 +139,8 @@ class PathFinder
       # On the other hand, if the G cost of the new path is lower, change the parent of the adjacent square to the selected square
       # (in the diagram above, change the direction of the pointer to point at the selected square). Finally, recalculate both the F and G
       # scores of that square. If this seems confusing, you will see it illustrated below.
-      kind_of_walkable_points_from(current_point).each do |point|
+      walkable_points = kind_of_walkable_points_from(current_point)
+      walkable_points.each do |point|
         # Do nothing if already on the closed list
         unless closed_list.include?(point)
           adjacent_g_cost = calculate_g_cost parent_point || current_point, point
@@ -145,6 +164,8 @@ class PathFinder
       break if found_destination
 
       parent_point = current_point
+
+      counter = counter + 1
     end
 
     unless found_destination
@@ -165,7 +186,7 @@ class PathFinder
 
     @current_path = path
 
-    optimize_directions calculate_directions(path)
+    calculate_directions(path)
   end
 
   def calculate_directions(path)
