@@ -7,7 +7,9 @@ class Stealer < Explorer
 
     # Near an item
     item = closest_item(world)
-    return true if item
+
+    # Only if there are treasures in it
+    return true if item && item.treasures.any?
 
     false
   end

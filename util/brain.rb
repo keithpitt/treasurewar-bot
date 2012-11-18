@@ -24,7 +24,7 @@ class Brain
       Dropoff.new(self),
       Takeback.new(self),
       Pickup.new(self),
-      # Stealer.new(self),
+      Stealer.new(self),
       Hunter.new(self),
       Explorer.new(self),
       Wanderer.new(self)

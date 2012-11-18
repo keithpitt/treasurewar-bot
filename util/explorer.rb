@@ -22,7 +22,12 @@ class Explorer
 
   def decide_action(world)
     if @path_finder
-      tick = @path_finder.tick(world)
+      tick = begin
+               @path_finder.tick(world)
+             rescue
+               false
+             end
+
       if tick
         return tick
       else
@@ -35,7 +40,11 @@ class Explorer
 
     if point
       @path_finder = PathFinder.new(@brain, point)
-      @path_finder.tick(world)
+      begin
+        @path_finder.tick(world)
+      rescue
+        return false
+      end
     else
       false
     end

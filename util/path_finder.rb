@@ -75,11 +75,13 @@ class PathFinder
     open_list = [ PointMoved.new(@starting_point, 0, nil) ]
     parent_point = nil
     been_there = {}
+    counter = 0
 
     found_destination = nil
 
     while !open_list.empty?
-      p [ @starting_point, @destination ]
+      break if counter > 1000
+
       current_point = nil
       lowest_f_cost = nil
       lowest_h_cost = nil
@@ -156,6 +158,8 @@ class PathFinder
       break if found_destination
 
       parent_point = current_point
+
+      counter = counter + 1
     end
 
     unless found_destination
@@ -164,20 +168,24 @@ class PathFinder
       p @starting_point
       p @destination
       p @brain.map.tiles
-      raise 'cant find it'
+      p 'cant find it'
     end
 
-    path = []
-    parent = found_destination
-    while parent && parent.parent != nil
-      path << parent
-      parent = parent.parent
+    if found_destination
+      path = []
+      parent = found_destination
+      while parent && parent.parent != nil
+        path << parent
+        parent = parent.parent
+      end
+      path << @starting_point
+
+      @current_path = path
+
+      optimize_directions calculate_directions(path)
+    else
+      []
     end
-    path << @starting_point
-
-    @current_path = path
-
-    optimize_directions calculate_directions(path)
   end
 
   def calculate_directions(path)

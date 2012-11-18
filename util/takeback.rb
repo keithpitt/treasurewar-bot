@@ -2,7 +2,6 @@ require_relative './points'
 
 class Takeback < Explorer
   def do_something?(world)
-    p 'do something'
     # Currently walking?
     return true if @path_finder
 
